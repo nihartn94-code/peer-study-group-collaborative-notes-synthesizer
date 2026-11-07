@@ -10,10 +10,7 @@ sys.path.insert(0, str(ROOT_DIR))
 load_dotenv(Path(__file__).resolve().parent / ".env")
 load_dotenv()
 
-try:
-    from backend.memory import create_or_update_bank, BANK_ID
-except ImportError:
-    from memory import create_or_update_bank, BANK_ID
+from backend.memory import create_or_update_bank, BANK_ID
 
 
 def main():

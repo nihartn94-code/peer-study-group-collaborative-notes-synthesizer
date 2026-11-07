@@ -11,10 +11,7 @@ sys.path.insert(0, str(ROOT_DIR))
 load_dotenv(Path(__file__).resolve().parent / ".env")
 load_dotenv()
 
-try:
-    from backend.memory import retain_memory, BANK_ID
-except ImportError:
-    from memory import retain_memory, BANK_ID
+from backend.memory import retain_memory, BANK_ID
 
 
 def main():
