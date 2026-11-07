@@ -7,6 +7,8 @@ from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+
 from reference.hindsight_client import Hindsight
 
 load_dotenv(Path(__file__).resolve().parent / ".env")

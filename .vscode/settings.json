@@ -1,13 +1,15 @@
 {
+  "python.defaultInterpreterPath": "C:\\Users\\NIKHIL T N\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
   "python.analysis.extraPaths": [
     "${workspaceFolder}",
     "${workspaceFolder}/backend",
-    "${workspaceFolder}/reference"
+    "${workspaceFolder}/reference",
+    "C:/Users/NIKHIL T N/AppData/Local/Programs/Python/Python312/Lib/site-packages"
   ],
   "python.autoComplete.extraPaths": [
     "${workspaceFolder}",
     "${workspaceFolder}/backend",
-    "${workspaceFolder}/reference"
+    "${workspaceFolder}/reference",
+    "C:/Users/NIKHIL T N/AppData/Local/Programs/Python/Python312/Lib/site-packages"
   ]
 }
-
