@@ -1,0 +1,53 @@
+---
+description: RecallRoom project rules (Hindsight hackathon prototype)
+alwaysApply: true
+---
+
+# Project: RecallRoom (Community Knowledge Memory)
+
+A hackathon prototype. A group learns together; the agent remembers peer
+explanations, doubts, and quiz mistakes, and gets smarter over time.
+Memory (Hindsight) is the STAR of the product, not a feature.
+
+## Stack
+- Backend: FastAPI (Python 3.11+) in `backend/`
+- Frontend: Next.js + Tailwind in `frontend/`
+- LLM: Groq via its OpenAI-compatible API. Default model `openai/gpt-oss-120b`,
+  fallback `qwen/qwen3-32b`
+- Memory: Hindsight Cloud (`https://api.hindsight.vectorize.io`) using the
+  `hindsight-client` Python package
+
+## Hindsight rules (IMPORTANT)
+- ALL Hindsight calls live in `backend/memory.py`. No other file imports the client.
+- Only use methods that exist in `reference/hindsight_client.py`. NEVER invent
+  methods or parameters. If unsure, read that file first.
+- Client init: `Hindsight(base_url=..., api_key=...)`. Read both from `.env`.
+- Bank id: `group-dsa`. One bank per group.
+- Every `retain` MUST include `timestamp`, `context`, and `tags`.
+- Tag scheme (lowercase, always these prefixes):
+  - `topic:<name>`   e.g. topic:dp, topic:graphs, topic:heaps
+  - `type:<kind>`    explanation | doubt | quiz_attempt | session_summary
+  - `person:<name>`  e.g. person:rahul
+  - `outcome:<x>`    pass | fail (quiz_attempt only)
+- Use `recall(..., tags=[...], include_source_facts=True)` for the answer path.
+- Always return the raw recalled memories to the frontend so the Memory Panel
+  can show them.
+
+## LLM rules
+- Every Groq call goes through one helper in `backend/llm.py`.
+- Retry up to 3 times on function-calling errors, malformed JSON, or timeouts.
+  After 3 failures, fall back to a plain-text answer. Never crash the request.
+
+## Product rules
+- The Memory Panel (recalled memories with author, date, tags) must be visible
+  on every main page.
+- Memory ON/OFF toggle: OFF = LLM sees only the question. ON = LLM also gets
+  recalled memories. Show both answers side by side.
+- If recall returns nothing, say "I don't have anything on that yet." Never
+  invent peer explanations or attribute quotes to people.
+- Quizzes are a small extra. The headline features are recall and the group gap map.
+
+## Code rules
+- Keep it simple. No auth, no extra database. Hindsight is the memory store.
+- Secrets only in `.env`. Never hardcode keys. `.env` must be in `.gitignore`.
+- Small functions, type hints, short docstrings. Commit-ready after each step.
