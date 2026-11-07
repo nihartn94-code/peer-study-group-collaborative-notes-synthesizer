@@ -149,7 +149,7 @@ def _load_all_local_sessions() -> List[Dict[str, Any]]:
 
     seed_file = Path(__file__).resolve().parent / "seed_sessions.json"
     if not seed_file.exists():
-        seed_file = ROOT_DIR / "backend" / "seed_sessions.json"
+        seed_file = Path(__file__).resolve().parent.parent / "backend" / "seed_sessions.json"
 
     if seed_file.exists():
         try:
