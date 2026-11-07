@@ -16,9 +16,15 @@ DEFAULT_MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-120b")
 FALLBACK_MODEL = "qwen/qwen3-32b"
 
 
-def get_openai_client() -> OpenAI:
-    api_key = os.getenv("GROQ_API_KEY", "")
-    return OpenAI(base_url=GROQ_BASE_URL, api_key=api_key)
+def get_openai_client() -> Optional[OpenAI]:
+    api_key = os.getenv("GROQ_API_KEY", "").strip()
+    if not api_key or api_key.startswith("paste_your"):
+        return None
+    try:
+        return OpenAI(base_url=GROQ_BASE_URL, api_key=api_key)
+    except Exception as e:
+        logger.warning("Could not initialize OpenAI client: %s", e)
+        return None
 
 
 def clean_json_text(text: str) -> str:
@@ -43,6 +49,12 @@ def call_llm(
     Never crashes a request. Falls back to a safe answer after retries fail.
     """
     client = get_openai_client()
+    if client is None:
+        logger.warning("GROQ_API_KEY is not configured or invalid. Returning fallback text.")
+        if as_json:
+            return json.dumps({"items": [], "error": "GROQ_API_KEY not configured"})
+        return fallback_text
+
     full_messages: List[Dict[str, str]] = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
@@ -89,3 +101,4 @@ def call_llm(
     if as_json:
         return json.dumps({"error": str(last_error), "fallback": fallback_text})
     return fallback_text
+

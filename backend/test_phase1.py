@@ -47,3 +47,4 @@ if __name__ == "__main__":
     test_memory_parsing()
     test_json_cleaner()
     print("ALL PHASE 1 UNIT TESTS PASSED!")
+

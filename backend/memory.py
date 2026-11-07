@@ -5,7 +5,17 @@ from typing import Any, Dict, List, Optional
 from datetime import datetime
 from dotenv import load_dotenv
 
-from reference.hindsight_client import Hindsight
+import sys
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+try:
+    from reference.hindsight_client import Hindsight
+except ImportError:
+    from hindsight_client import Hindsight
 
 load_dotenv()
 
@@ -229,3 +239,4 @@ def get_or_create_gap_mental_model(bank_id: str = BANK_ID) -> str:
 
     # Fallback to reflect_on
     return reflect_on(query=source_query, bank_id=bank_id)
+

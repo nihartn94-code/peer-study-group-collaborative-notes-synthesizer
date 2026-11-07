@@ -7,13 +7,30 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from backend.memory import (
-    retain_memory,
-    recall_memories,
-    reflect_on,
-    get_or_create_gap_mental_model,
-)
-from backend.llm import call_llm
+import sys
+from pathlib import Path
+
+# Ensure root and backend directories are in python path
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+try:
+    from backend.memory import (
+        retain_memory,
+        recall_memories,
+        reflect_on,
+        get_or_create_gap_mental_model,
+    )
+    from backend.llm import call_llm
+except ImportError:
+    from memory import (
+        retain_memory,
+        recall_memories,
+        reflect_on,
+        get_or_create_gap_mental_model,
+    )
+    from llm import call_llm
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("recallroom.api")
@@ -322,3 +339,4 @@ def practice(req: PracticeRequest):
         "question": question,
         "justification": justification,
     }
+

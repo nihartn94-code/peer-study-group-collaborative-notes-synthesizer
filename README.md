@@ -191,3 +191,4 @@ recallroom/
     ├── hindsight_client.py    # Official reference client
     └── docs/                  # API reference documentation
 ```
+

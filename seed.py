@@ -2,3 +2,4 @@ from backend.seed import main
 
 if __name__ == "__main__":
     main()
+
